@@ -6,9 +6,9 @@ DEPS=$(SRCS:.c=.d)
 BIN=uncc
 
 $(BIN): $(OBJS)
-	$(CC) $(CFLAGS) -o $(BIN) $(OBJS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ 
 
-$(OBJS): $(SRCS) $(DEPS)
+%.o: %.c %.d
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c -o $@ $<
 
 $(DEPS):
