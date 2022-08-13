@@ -3,3 +3,4 @@ uncc
 *.o
 *.d
 core.*
+*.swp
