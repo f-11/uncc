@@ -21,8 +21,10 @@ typedef struct Token {
   Token_kind kind;
   struct Token *next;
   char *p;    // if token is TK_VAR: use as a name of variable
-  int n;    // if token is TK_VAR: length of variable name. 
-            // else if token is TK_NUM: value of itself
+  union {
+    int len;    // if token is TK_VAR: length of variable name. 
+    int n;      // else if token is TK_NUM: value of itself
+  };
 } Token;
 
 // global variable

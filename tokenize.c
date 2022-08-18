@@ -16,6 +16,7 @@ void new_token (Token_kind kind) {
   head->next = new;
   head = new;
   new->kind = kind;
+  return;
 }
 
 void new_number_token(int n) {
@@ -23,6 +24,17 @@ void new_number_token(int n) {
   head->next = new;
   head = new;
   new->kind = TK_NUM;
+  new->n = n;
+  return;
+}
+
+void new_var_token(char *p, int len) {
+  Token *new = calloc(1, sizeof(Token));
+  head->next = new;
+  head = new;
+  new->kind = TK_VAR;
+  new->p = p;
+  new->len = len;
   return;
 }
 
@@ -39,10 +51,24 @@ Token *tokenize(char *input) {
       p++;
       continue;
     } else if (isdigit(*p)) {
-      //char *end;
       int n = (int)strtol(p, &p, 10);
       new_number_token(n);
-      //p = end - 1;
+      continue;
+    } else if (strncmp(p, "&&", 2)){
+      new_token(TK_AND);
+      p += 2;
+      continue;
+    } else if (strncmp(p, "||", 2)){
+      new_token(TK_OR);
+      p += 2;
+      continue;
+    } else if (!strncmp(p, "==", 2)){
+      new_token(TK_EQ);
+      p += 2;
+      continue;
+    } else if (!strncmp(p, "!=", 2)){
+      new_token(TK_NEQ);
+      p += 2;
       continue;
     } else if (*p == '+') {
       new_token(TK_ADD);
@@ -58,6 +84,10 @@ Token *tokenize(char *input) {
       continue;
     } else if (*p == '/') {
       new_token(TK_DIV);
+      p++;
+      continue;
+    } else if (*p == '%') {
+      new_token(TK_MOD);
       p++;
       continue;
     } else if (*p == ';') {
